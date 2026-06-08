@@ -12,10 +12,14 @@
 </head>
 <body>
 
+<!-- ═══ SITE SHELL: nav locked, content scrolls below ═══ -->
+<div id="site">
+
 <!-- ======================== NAVBAR ======================== -->
 <nav id="navbar">
+  <div id="scrollProgress"></div>
   <div class="nav-inner">
-    <a href="#" class="nav-logo">FRESH<span>‑</span>CRAFT</a>
+    <a href="#hero" class="nav-logo">FRESH<span>‑</span>CRAFT</a>
     <ul class="nav-links" id="navLinks">
       <li><a href="#about">About</a></li>
       <li><a href="#expertise">Expertise</a></li>
@@ -29,6 +33,9 @@
     </button>
   </div>
 </nav>
+
+<!-- ═══ SCROLLABLE CONTENT AREA ═══ -->
+<div id="scrollArea">
 
 <!-- ======================== HERO ======================== -->
 <section id="hero">
@@ -866,5 +873,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="js/main.js"></script>
+
+</div><!-- /#scrollArea -->
+</div><!-- /#site -->
 </body>
 </html>

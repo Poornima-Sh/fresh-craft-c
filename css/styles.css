@@ -7,9 +7,7 @@
 /* === RESET & BASE === */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html {
-  scroll-behavior: smooth;
   font-size: 16px;
-  scroll-padding-top: 72px; /* offset for sticky navbar */
 }
 body {
   font-family: 'Open Sans', sans-serif;
@@ -115,17 +113,49 @@ p { font-size:1rem; line-height:1.8; color: var(--dark-grey); }
 .nav-cta { padding:10px 22px !important; font-size:0.72rem !important; }
 
 /* ===========================================
-   NAVBAR
+   SITE SHELL — flex column layout
+   Nav locked at top; content scrolls below
+=========================================== */
+html, body {
+  height:100%;
+  margin:0;
+  padding:0;
+  overflow:hidden;
+}
+#site {
+  display:flex;
+  flex-direction:column;
+  height:100vh;
+}
+#scrollArea {
+  flex:1;
+  overflow-y:auto;
+  overflow-x:hidden;
+  min-height:0;
+  scroll-behavior:smooth;
+  scroll-padding-top:8px;
+}
+
+/* ===========================================
+   NAVBAR — always locked at top of #site
 =========================================== */
 #navbar {
-  position:sticky;
-  top:0; left:0; right:0;
+  flex-shrink:0;
+  position:relative; /* for #scrollProgress child */
   z-index:1000;
   padding:0 2rem;
   background:#ffffff;
   box-shadow:0 2px 20px rgba(0,0,0,0.08);
   border-bottom:1px solid var(--border);
-  transition:box-shadow 0.3s ease;
+}
+#scrollProgress {
+  position:absolute;
+  top:0; left:0;
+  height:3px; width:0%;
+  background:var(--red);
+  transition:width 0.1s linear;
+  pointer-events:none;
+  z-index:1;
 }
 .nav-inner {
   max-width:1280px;
@@ -264,7 +294,7 @@ p { font-size:1rem; line-height:1.8; color: var(--dark-grey); }
   align-items:center;
   padding-top:40px;
   padding-bottom:40px;
-  min-height:calc(100vh - 72px); /* subtract sticky navbar height */
+  min-height:calc(100vh - 75px); /* viewport minus navbar */
 }
 .hero-badge {
   display:inline-flex;
@@ -1012,11 +1042,11 @@ textarea.form-control { resize:vertical; min-height:110px; }
   .nav-links {
     display:none;
     position:absolute;
-    top:100%; left:0; right:0; /* sits directly below the sticky navbar */
+    top:100%; left:0; right:0;
     background:#fff;
     flex-direction:column;
     padding:20px 2rem 28px;
-    box-shadow:0 8px 30px rgba(0,0,0,0.1);
+    box-shadow:0 8px 30px rgba(0,0,0,0.12);
     border-top:1px solid var(--border);
     gap:0;
   }
