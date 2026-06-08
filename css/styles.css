@@ -6,7 +6,11 @@
 
 /* === RESET & BASE === */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 16px; }
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  scroll-padding-top: 72px; /* offset for sticky navbar */
+}
 body {
   font-family: 'Open Sans', sans-serif;
   color: #333333;
@@ -114,17 +118,14 @@ p { font-size:1rem; line-height:1.8; color: var(--dark-grey); }
    NAVBAR
 =========================================== */
 #navbar {
-  position:fixed;
+  position:sticky;
   top:0; left:0; right:0;
   z-index:1000;
   padding:0 2rem;
-  transition:var(--transition);
-}
-#navbar.scrolled {
-  background:rgba(255,255,255,0.97);
-  backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
+  background:#ffffff;
   box-shadow:0 2px 20px rgba(0,0,0,0.08);
+  border-bottom:1px solid var(--border);
+  transition:box-shadow 0.3s ease;
 }
 .nav-inner {
   max-width:1280px;
@@ -261,8 +262,9 @@ p { font-size:1rem; line-height:1.8; color: var(--dark-grey); }
   grid-template-columns:1fr 1fr;
   gap:60px;
   align-items:center;
-  padding-top:80px;
-  min-height:100vh;
+  padding-top:40px;
+  padding-bottom:40px;
+  min-height:calc(100vh - 72px); /* subtract sticky navbar height */
 }
 .hero-badge {
   display:inline-flex;
@@ -1010,18 +1012,19 @@ textarea.form-control { resize:vertical; min-height:110px; }
   .nav-links {
     display:none;
     position:absolute;
-    top:72px; left:0; right:0;
+    top:100%; left:0; right:0; /* sits directly below the sticky navbar */
     background:#fff;
     flex-direction:column;
     padding:20px 2rem 28px;
     box-shadow:0 8px 30px rgba(0,0,0,0.1);
+    border-top:1px solid var(--border);
     gap:0;
   }
   .nav-links.open { display:flex; }
   .nav-links li { border-bottom:1px solid var(--border); }
   .nav-links a { display:block; padding:12px 0; }
   .nav-cta { margin-top:12px; display:inline-flex; }
-  .hero-inner { grid-template-columns:1fr; padding-top:100px; }
+  .hero-inner { grid-template-columns:1fr; padding-top:32px; }
   .hero-illustration-wrap { display:none; }
   .about-grid { grid-template-columns:1fr; }
   .expertise-grid { grid-template-columns:1fr 1fr; }

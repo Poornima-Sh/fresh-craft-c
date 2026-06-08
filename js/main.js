@@ -12,11 +12,23 @@ document.addEventListener('DOMContentLoaded', () => {
   gsap.registerPlugin(ScrollTrigger);
 
   /* ─────────────────────────────────
-     NAVBAR scroll behaviour
+     SCROLL PROGRESS BAR
+     (Navbar is always white — no
+     class toggle needed)
   ───────────────────────────────── */
+  const progressBar = document.createElement('div');
+  progressBar.id = 'scrollProgress';
+  progressBar.style.cssText = `
+    position:absolute; top:0; left:0; height:3px;
+    background:#E30613; width:0%;
+    transition:width 0.1s linear; pointer-events:none; z-index:1001;
+  `;
   const navbar = document.getElementById('navbar');
+  if (navbar) navbar.style.position = 'relative';
+  if (navbar) navbar.prepend(progressBar);
   window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 30);
+    const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+    progressBar.style.width = Math.min(pct, 100) + '%';
   }, { passive: true });
 
   /* ─────────────────────────────────
@@ -28,12 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
     hamburger.addEventListener('click', () => {
       hamburger.classList.toggle('active');
       navLinks.classList.toggle('open');
-    });
-    navLinks.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => {
-        hamburger.classList.remove('active');
-        navLinks.classList.remove('open');
-      });
     });
   }
 
@@ -399,15 +405,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ─────────────────────────────────
      SMOOTH ANCHOR SCROLL
+     Uses native scrollTo — no plugin
   ───────────────────────────────── */
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
-      const target = document.querySelector(this.getAttribute('href'));
+      const href   = this.getAttribute('href');
+      const target = href === '#' ? document.body : document.querySelector(href);
       if (!target) return;
       e.preventDefault();
-      const offset = 72; // navbar height
-      const top    = target.getBoundingClientRect().top + window.scrollY - offset;
-      gsap.to(window, { scrollTo: { y: top, autoKill: false }, duration: 1, ease: 'power3.inOut' });
+      const navbarEl = document.getElementById('navbar');
+      const navH     = navbarEl ? navbarEl.offsetHeight : 72;
+      const top      = target.getBoundingClientRect().top + window.pageYOffset - navH - 4;
+      window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+      // Close mobile menu if open
+      const hamburger = document.getElementById('hamburger');
+      const navLinks  = document.getElementById('navLinks');
+      if (hamburger) hamburger.classList.remove('active');
+      if (navLinks)  navLinks.classList.remove('open');
     });
   });
 
@@ -480,23 +494,6 @@ document.addEventListener('DOMContentLoaded', () => {
     tickerWrap.addEventListener('mouseenter', () => ticker.style.animationPlayState = 'paused');
     tickerWrap.addEventListener('mouseleave', () => ticker.style.animationPlayState = 'running');
   }
-
-  /* ─────────────────────────────────
-     SCROLL PROGRESS indicator (thin
-     red bar at top of page)
-  ───────────────────────────────── */
-  const progressBar = document.createElement('div');
-  progressBar.style.cssText = `
-    position:fixed; top:0; left:0; height:3px;
-    background:#E30613; z-index:9999;
-    width:0%; transition:width 0.1s linear;
-    pointer-events:none;
-  `;
-  document.body.appendChild(progressBar);
-  window.addEventListener('scroll', () => {
-    const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
-    progressBar.style.width = Math.min(pct, 100) + '%';
-  }, { passive: true });
 
   /* ─────────────────────────────────
      EXPERTISE CARDS — stagger on
